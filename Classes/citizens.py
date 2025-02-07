@@ -8,7 +8,7 @@ class Citizens():
     def __init__(self):
         self.name = first_name[randrange(len(first_name))] + " " + last_name[randrange(len(last_name))]
         self.property = {
-            "money" : 100.0
+            "money" : 100
         }
         all_citizens.append(self)
 
