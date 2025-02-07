@@ -53,17 +53,17 @@ def purchase_commodities(buyer, quality, quantity): # M-C / C-M
         print(f"\nThere isn't enough on the market for citizen {buyer} to buy how much he desires.")
         return
     else: # otherwise if we are at a quantity of satisfaction
-        if sum(a * b for a, b in zip(prices_per_unit, quantities)) > buyer.money: # checks if buyer has too little money
+        if sum(a * b for a, b in zip(prices_per_unit, quantities)) > buyer.property["money"]: # checks if buyer has too little money
             print("\nThe citizen does not have enough money to afford this commodity.")
             return
         else: # buyer has enough or more than enough money
             for (a, b, c) in zip(shopping_cart, prices_per_unit, quantities):
-                buyer.money = round(buyer.money - b * c, 2)  # Deduct the rounded cost
+                buyer.property["money"] = round(buyer.property["money"] - b * c, 2)  # Deduct the rounded cost
                 try:
                     buyer.property[a.quality] += c  # Add the purchased quantity to buyer's property
                 except KeyError:
                     buyer.property[a.quality] = c
-                a.seller.money = round(a.seller.money + b * c, 2)  # Add the rounded cost to seller's money
+                a.seller.property["money"] = round(a.seller.property["money"] + b * c, 2)  # Add the rounded cost to seller's money
                 a.quantity -= c  # Reduce the commodity quantity
                 if a.quantity == 0:  # Remove item from the marketplace if sold out
                     CURRENT_MARKETPLACE.remove(a)

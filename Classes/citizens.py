@@ -6,9 +6,10 @@ last_name = ['Kensington', 'Musk', 'Buffet', 'Bezos', 'Zuckerberg', 'Gates', "Fa
 
 class Citizens():
     def __init__(self):
-        self.money = 100.0
         self.name = first_name[randrange(len(first_name))] + " " + last_name[randrange(len(last_name))]
-        self.property = {}
+        self.property = {
+            "money" : 100.0
+        }
         all_citizens.append(self)
 
     def assign_profession(self, profession_input):
@@ -19,11 +20,11 @@ class Citizens():
             all_citizens_by_profession[profession_input] = [self]
 
     def money_income (self, amount):
-        self.money += amount
+        self.property["money"] += amount
 
     def money_spending (self, amount):
-        if self.money - amount <= 0:
-            self.money -= amount
+        if self.property["money"] - amount <= 0:
+            self.property["money"] -= amount
         else:
             print('This citizen does not have enough money to spend')
 
