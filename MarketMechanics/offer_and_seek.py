@@ -6,23 +6,24 @@ def put_batch_of_commodities_for_sale(seller, quality, offer_price_perUnit, quan
     if quantity <= 0:
         print(f"Error: quantity ({quantity}) of quality ({quality}) sold by {seller.name}, must be a positive integer.")
         return # invalid quantity of commodities
-    # Check if seller has enough to sell how much he desires to
-    for a, b in seller.property.items():
+    
+    for a, b in seller.commodities.items(): # Check if seller has enough to sell how much he desires to
         if quality == a and quantity > b:
             print(f'\nCitizen {seller.name} does not have enough of this commodity to put up for sale.')
             return
         elif quality == a and quantity <= b:
             break
+
     else: # if the loop completes without finding the item
         return
-    # If all checks passed, creates an instance of MarketCommodities
-    MarketCommodities(seller, quality, offer_price_perUnit, quantity) # assumption that offer price does not change, 
+    
+    MarketCommodities(seller, quality, offer_price_perUnit, quantity) # If all checks passed, creates an instance of MarketCommodities | assumption that offer price does not change, 
     # not necessarily inherently accompanied by the assumption that the buyer must buy, because in order to buy the 
     # function needs to be run, so that in effect signifies the agreement for an offer price. We will make the assumption 
     # that the buyer takes a given offer price, but this assumption is not made here
 
 
-def purchase_commodities(buyer, quality, quantity): # M-C / C-M
+def purchase_commodities(buyer, quality, quantity, dry_run = False): # M-C / C-M
     shopping_cart = []
     prices_per_unit = []
     quantities = []
@@ -34,9 +35,11 @@ def purchase_commodities(buyer, quality, quantity): # M-C / C-M
     # making a shopping cart and checking if there is enough to buy, and if you can afford
     if not sorted_selected_marketplace:
         print(f'\nCitizen {buyer.name} is attempting to buy commodity {quality} that does not exist on the market.')
-        return
+        return "fail"
     for a in sorted_selected_marketplace:
+
         if a.quantity > 0: # check if there is more than one of this kind of good
+
             if sum(quantities) + a.quantity > quantity: # check if with the addition of this next batch of commodities, we would get more than we need
                 shopping_cart.append(a)
                 prices_per_unit.append(a.offer_price_perUnit)
@@ -49,21 +52,28 @@ def purchase_commodities(buyer, quality, quantity): # M-C / C-M
                 shopping_cart.append(a)
                 prices_per_unit.append(a.offer_price_perUnit)
                 quantities.append(a.quantity)
+
     if sum(quantities) < quantity: # check if after going through every commodity on the market we are still not at satisfaction
         print(f"\nThere isn't enough on the market for citizen {buyer} to buy how much he desires.")
-        return
+        return "fail"
+    
     else: # otherwise if we are at a quantity of satisfaction
-        if sum(a * b for a, b in zip(prices_per_unit, quantities)) > buyer.property["money"]: # checks if buyer has too little money
+        if sum(a * b for a, b in zip(prices_per_unit, quantities)) > buyer.commodities["money"]: # checks if buyer has too little money
             print("\nThe citizen does not have enough money to afford this commodity.")
-            return
+            return "fail"
+        elif dry_run:
+                return "success" 
+        
         else: # buyer has enough or more than enough money
             for (a, b, c) in zip(shopping_cart, prices_per_unit, quantities):
-                buyer.property["money"] = round(buyer.property["money"] - b * c, 2)  # Deduct the rounded cost
+                buyer.money_spending(round(b * c, 2))  # Deduct the rounded cost
                 try:
-                    buyer.property[a.quality] += c  # Add the purchased quantity to buyer's property
+                    buyer.commodities[a.quality] += c  # Add the purchased quantity to buyer's commodities
                 except KeyError:
-                    buyer.property[a.quality] = c
-                a.seller.property["money"] = round(a.seller.property["money"] + b * c, 2)  # Add the rounded cost to seller's money
+                    buyer.commodities[a.quality] = c
+                a.seller.money_income(round(b * c, 2))  # Add the rounded cost to seller's money
                 a.quantity -= c  # Reduce the commodity quantity
                 if a.quantity == 0:  # Remove item from the marketplace if sold out
                     CURRENT_MARKETPLACE.remove(a)
+
+            return "success"

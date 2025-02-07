@@ -14,7 +14,7 @@ def pass_day():
     print(f"day {day}")
 
 # admin functions
-def assign_property_to_pops(input, citizens_nums = [], quality = "", quantity = 1):
+def assign_commodities_to_pops(input, citizens_nums = [], quality = "", quantity = 1):
     if input == "manual":
         print("\n___________________________________________________________________________")
         user_input = input('Enter the following information in the following format and order:\n[citizen nums separated by comma and whitespace]|"quality"|quantity\n\n> ')
@@ -25,19 +25,19 @@ def assign_property_to_pops(input, citizens_nums = [], quality = "", quantity = 
     
     for citizen_num in citizens_nums:
         try:
-            all_citizens[citizen_num].property[quality] += quantity
+            all_citizens[citizen_num].commodities[quality] += quantity
         except:
-            all_citizens[citizen_num].property[quality] = quantity
+            all_citizens[citizen_num].commodities[quality] = quantity
 
 
 
 # display functions
 def display_current_info(what_to_display):
-    if what_to_display == "all" or "property":
+    if what_to_display == "all" or "commodities":
         print("\n___________________________________________________________________________")
         for a in all_citizens:
             print(f'\n\n> Citiizen {a.name}')
-            for x, y in a.property.items():
+            for x, y in a.commodities.items():
                 print("-" + x, y)
         print("___________________________________________________________________________")
     if what_to_display == "all" or "current marketplace":  
@@ -52,12 +52,8 @@ def display_current_info(what_to_display):
 createCitizens()
 
 
-assign_property_to_pops("auto", [0, 4, 9], "flour100g", 100)
-assign_property_to_pops("auto", [0, 2, 4], "LP_per_day", 10)
-
-
-
-C_P_C(all_citizens[0], 'spaghetti')
+assign_commodities_to_pops("auto", [0, 4, 9], "flour100g", 100)
+assign_commodities_to_pops("auto", [0, 2, 4], "LP_per_day", 10)
 
 display_current_info('all')
 
@@ -77,5 +73,10 @@ display_current_info('all')
 
 C_P_C(all_citizens[0], 'spaghetti')
 C_P_C(all_citizens[1], 'spaghetti', 2)
+
+
+M_C_P_C(all_citizens[0], 'spaghetti')
+
+display_current_info('all')
 
 print('')
