@@ -30,13 +30,12 @@ def assign_commodities_to_pops(input, citizens_nums = [], quality = "", quantity
             all_citizens[citizen_num].commodities[quality] = quantity
 
 
-
 # display functions
 def display_current_info(what_to_display):
     if what_to_display == "all" or "commodities":
         print("\n___________________________________________________________________________")
         for a in all_citizens:
-            print(f'\n\n> Citiizen {a.name}')
+            print(f'\n\n> Citiizen {a.name}\n{a}')
             for x, y in a.commodities.items():
                 print("-" + x, y)
         print("___________________________________________________________________________")
@@ -57,8 +56,9 @@ assign_commodities_to_pops("auto", [0, 2, 4], "LP_per_day", 10)
 
 display_current_info('all')
 
-put_batch_of_commodities_for_sale(all_citizens[0], 'flour100g', 0.1, 25)
-put_batch_of_commodities_for_sale(all_citizens[0], 'LP_per_day', 0.1, 3)
+put_batch_of_commodities_for_sale(all_citizens[0], 'flour100g', 1, 25)
+put_batch_of_commodities_for_sale(all_citizens[4], 'flour100g', 1, 25)
+put_batch_of_commodities_for_sale(all_citizens[0], 'LP_per_day', 1, 3)
 
 
 display_current_info('all')
@@ -75,7 +75,7 @@ C_P_C(all_citizens[0], 'spaghetti')
 C_P_C(all_citizens[1], 'spaghetti', 2)
 
 
-M_C_P_C(all_citizens[0], 'spaghetti')
+M_C_P_C(all_citizens[0], 'spaghetti', 3)
 
 display_current_info('all')
 

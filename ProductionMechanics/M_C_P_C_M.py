@@ -27,13 +27,16 @@ def M_C_P_C(ownerofmoney, recipe, itterations = 1):
 
     # Check if ALL required purchases can be made
     for x, y in inputs.items():
+        y = y * itterations
         if purchase_commodities(ownerofmoney, x, y, dry_run=True) == "fail":
-            print(f"\n{ownerofmoney.name} cannot afford or find enough {x} to produce {recipe}.")
+            print(f"\n{ownerofmoney.name} cannot afford or find enough {x} to buy the goods needed to produce {recipe}.")
             return  # Abort if any single purchase fails.
 
     # If all purchases are possible, execute them
     for x, y in inputs.items():
+        y = y * itterations
         purchase_commodities(ownerofmoney, x, y)
 
-    # Proceed with production (C-P-C)
-    C_P_C(ownerofmoney, recipe)
+    print(f"Citizen {ownerofmoney} sucessfully bought commodities for x{itterations} production of {recipe}")
+    # Proceed with production (C-P-C )
+    C_P_C(ownerofmoney, recipe, itterations)

@@ -24,9 +24,9 @@ class Citizens():
 
     def money_spending (self, amount):
         if self.commodities["money"] - amount <= 0:
-            self.commodities["money"] -= amount
+            print(f'Citizen {self.name} does not have enough money to spend')
         else:
-            print('This citizen does not have enough money to spend')
+            self.commodities["money"] -= amount
 
 
 # creating a new citizen

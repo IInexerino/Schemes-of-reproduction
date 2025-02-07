@@ -15,6 +15,7 @@ def put_batch_of_commodities_for_sale(seller, quality, offer_price_perUnit, quan
             break
 
     else: # if the loop completes without finding the item
+        print(f'\nCitizen {seller.name} does not have enough of this commodity to put up for sale.')
         return
     
     MarketCommodities(seller, quality, offer_price_perUnit, quantity) # If all checks passed, creates an instance of MarketCommodities | assumption that offer price does not change, 
@@ -54,12 +55,12 @@ def purchase_commodities(buyer, quality, quantity, dry_run = False): # M-C / C-M
                 quantities.append(a.quantity)
 
     if sum(quantities) < quantity: # check if after going through every commodity on the market we are still not at satisfaction
-        print(f"\nThere isn't enough on the market for citizen {buyer} to buy how much he desires.")
+        print(f"\nThere isn't enough on the market for citizen {buyer.name} to buy how much he desires.")
         return "fail"
     
     else: # otherwise if we are at a quantity of satisfaction
         if sum(a * b for a, b in zip(prices_per_unit, quantities)) > buyer.commodities["money"]: # checks if buyer has too little money
-            print("\nThe citizen does not have enough money to afford this commodity.")
+            print(f"\nCitizen {buyer.name} does not have enough money to afford this commodity.")
             return "fail"
         elif dry_run:
                 return "success" 
