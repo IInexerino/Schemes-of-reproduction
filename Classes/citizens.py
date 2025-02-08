@@ -5,11 +5,14 @@ first_name = ['Alphonse', 'Warren', 'Joseph', 'Hugo', 'Rosa', 'Nexerino', 'Jotar
 last_name = ['Kensington', 'Musk', 'Buffet', 'Bezos', 'Zuckerberg', 'Gates', "Fanon", "Stalin", "Ventura", 'Maffi']
 
 class Citizens():
-    def __init__(self):
+    def __init__(self, property = {}):
         self.name = first_name[randrange(len(first_name))] + " " + last_name[randrange(len(last_name))]
-        self.commodities = {
-            "money" : 100
-        }
+        if property:
+            self.commodities = property
+        else: 
+            self.commodities = {
+                "money" : 100
+            }
         all_citizens.append(self)
 
     def assign_profession(self, profession_input):
@@ -29,21 +32,38 @@ class Citizens():
             self.commodities["money"] -= amount
 
 
-# creating a new citizen
-def createCitizens():
+# admin functions
+def createCitizens(quantity = 1, profession = ""):
     while True:
-        createCitizens_quantity_input = input('\nHow many citizens would you like to create? Or would you first like to set a profession (p):\n\n> ')
-        if createCitizens_quantity_input == "p":
-            global profession_choice
-            profession_choice = input("\nChoose the profession you would like the citizens to be:\n\n> ")
-            continue
-        elif (createCitizens_quantity_input.isnumeric() != True) or int(createCitizens_quantity_input) <= 0:
-            print("\nEner a valid input.")
-            continue
-        for _ in range(int(createCitizens_quantity_input)):
+        if input == "manual":
+            quantity = input('\nHow many citizens would you like to create? Or would you first like to set a profession (p):\n\n> ')
+            if quantity == "p":
+                profession = input("\nChoose the profession you would like the citizens to be:\n\n> ")
+                continue
+            elif (quantity() != True) or int(quantity) <= 0:
+                print("\nEner a valid input.")
+                continue
+        for _ in range(int(quantity)):
             new_citizen = Citizens()
             try:
-                new_citizen.assign_profession(profession_choice)
+                new_citizen.assign_profession(profession)
             except:
                 ...
         break
+
+
+def assign_commodities_to_pops(input, citizens_nums = [], quality = "", quantity = 1):
+    if input == "manual":
+        print("\n___________________________________________________________________________")
+        user_input = input('Enter the following information in the following format and order:\n[citizen nums separated by comma and whitespace]|"quality"|quantity\n\n> ')
+        user_input_list = user_input.split("|")
+        citizens_nums = (user_input_list[0].strip("[]")).split(", ")
+        quality = user_input_list[1]
+        quantity = int(user_input_list[2])
+    
+    for citizen_num in citizens_nums:
+        try:
+            all_citizens[citizen_num].commodities[quality] += quantity
+        except:
+            all_citizens[citizen_num].commodities[quality] = quantity
+
