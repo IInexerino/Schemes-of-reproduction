@@ -26,7 +26,7 @@ def display_current_info(what_to_display = "all"):
     if what_to_display == "all" or "current marketplace":  
         print("\n___________________________________________________________________________")
         for a in CURRENT_MARKETPLACE:
-            print(f"\n{a.quantity} : {a.quality} - {a.seller} | {a.seller.name}")
+            print(f"\n{a.quantity}  - ${a.offer_price_perUnit}/unit : {a.quality} - {a.seller} | {a.seller.name}")
         print("___________________________________________________________________________")
 
 
@@ -35,7 +35,7 @@ def display_current_info_in_ui(what_to_display = "all"):
     if what_to_display == "all" or "commodities":
         result += ("\n___________________________________________________")
         for a in all_citizens:
-            result += (f'\n\n> Citiizen {a.name}\n{a}\n')
+            result += (f'\n\n> Citiizen {a.name}\n{a}\nProfession: {a.profession}\n')
             for x, y in a.commodities.items():
                 result += (f"\n- {x} {y}")
             result += "\n"
@@ -44,39 +44,39 @@ def display_current_info_in_ui(what_to_display = "all"):
         if CURRENT_MARKETPLACE: 
             result += ("\n___________________________________________________________________________")
             for a in CURRENT_MARKETPLACE:
-                result += (f"\n{a.quantity} : {a.quality} - {a.seller} | {a.seller.name}")
+                result += (f"\n{a.quantity} - ${a.offer_price_perUnit}: {a.quality} - {a.seller} | {a.seller.name}")
             result += ("\n___________________________________________________________________________")
 
     return result
 
 
 #run code
-#assign_commodities_to_pops("auto", [0, 4, 9], "flour100g", 100)
-#assign_commodities_to_pops("auto", [0, 2, 4], "LP_per_day", 10)
+createCitizens(5)
 
-#display_current_info('all')
+assign_commodities_to_pops("auto", [0, 4], "flour100g", 100)
+assign_commodities_to_pops("auto", [0, 2, 4], "LP_per_day", 10)
 
-#put_batch_of_commodities_for_sale(all_citizens[0], 'flour100g', 1, 25)
-#put_batch_of_commodities_for_sale(all_citizens[4], 'flour100g', 1, 25)
-#put_batch_of_commodities_for_sale(all_citizens[0], 'LP_per_day', 1, 3)
+display_current_info('all')
 
-
-#display_current_info('all')
-
-
-#purchase_commodities(all_citizens[1], "flour100g", 20)
-#purchase_commodities(all_citizens[1], "LP_per_day", 2)
+put_batch_of_commodities_for_sale(all_citizens[0], 'flour100g', 1, 25)
+put_batch_of_commodities_for_sale(all_citizens[4], 'flour100g', 1, 25)
+put_batch_of_commodities_for_sale(all_citizens[0], 'LP_per_day', 1, 7)
 
 
-#display_current_info('all')
+display_current_info('all')
 
 
-#C_P_C(all_citizens[0], 'spaghetti')
-#C_P_C(all_citizens[1], 'spaghetti', 2)
+purchase_commodities(all_citizens[1], "flour100g", 20)
+purchase_commodities(all_citizens[1], "LP_per_day", 2)
 
 
-#M_C_P_C(all_citizens[0], 'spaghetti', 3)
+display_current_info('all')
 
-#display_current_info('all')
+C_P_C(all_citizens[1], 'spaghetti', 2)
+
+
+M_C_P_C_M(all_citizens[0], 'spaghetti', 1, 3)
+
+display_current_info('all')
 
 print('')

@@ -30,7 +30,7 @@ def M_C_P_C(ownerofmoney, recipe, itterations = 1):
         y = y * itterations
         if purchase_commodities(ownerofmoney, x, y, dry_run=True) == "fail":
             print(f"\n{ownerofmoney.name} cannot afford or find enough {x} to buy the goods needed to produce {recipe}.")
-            return  # Abort if any single purchase fails.
+            return "fail"
 
     # If all purchases are possible, execute them
     for x, y in inputs.items():
@@ -38,5 +38,23 @@ def M_C_P_C(ownerofmoney, recipe, itterations = 1):
         purchase_commodities(ownerofmoney, x, y)
 
     print(f"Citizen {ownerofmoney} sucessfully bought commodities for x{itterations} production of {recipe}")
-    # Proceed with production (C-P-C )
+    # Proceed with production (C-P-C)
     C_P_C(ownerofmoney, recipe, itterations)
+    return "success"
+    
+
+def M_C_P_C_M(owenerofmoney, recipe, offerprice_unit, itterations = 1):
+    outputs = PROD_RECIPES[recipe]['outputs']
+
+    # check if M_C_P_C can be done and the commodity can be aquired
+    M_C_P_C_status = M_C_P_C(owenerofmoney, recipe, itterations)
+
+    if M_C_P_C_status == "fail":
+        print(f"\nCitizen {owenerofmoney.name} {owenerofmoney} for some reason failed to purchase the commodities necessary to produce the specified recipe, aborting without proceeding with sale as the commodity to be sold was not produced.")
+        return "fail"
+    
+    # sell the specified amount of that commodity
+    if M_C_P_C_status == "success":
+        for a, b in outputs.items():
+            b = b * itterations
+            put_batch_of_commodities_for_sale(owenerofmoney, a, offerprice_unit, b)

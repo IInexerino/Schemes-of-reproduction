@@ -1,4 +1,3 @@
-
 PROD_RECIPES = {
     'flour' : {
         'inputs' : {
