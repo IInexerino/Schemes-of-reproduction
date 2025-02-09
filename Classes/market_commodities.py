@@ -1,4 +1,4 @@
-from Data import *
+from Data import CURRENT_MARKETPLACE
 
 class MarketCommodities():
     def __init__(self, seller, quality, offer_price_perUnit, quantity):

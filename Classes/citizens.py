@@ -1,5 +1,5 @@
 from random import randrange
-from Data import *
+from Data import all_citizens, all_citizens_by_profession
 
 first_name = ['Alphonse', 'Warren', 'Joseph', 'Hugo', 'Rosa', 'Nexerino', 'Jotaro', 'Giuseppe', 'Lucien', "Renato", 'Bruno']
 last_name = ['Kensington', 'Musk', 'Buffet', 'Bezos', 'Zuckerberg', 'Gates', "Fanon", "Stalin", "Ventura", 'Maffi']
@@ -7,6 +7,7 @@ last_name = ['Kensington', 'Musk', 'Buffet', 'Bezos', 'Zuckerberg', 'Gates', "Fa
 class Citizens():
     def __init__(self, property = {}):
         self.name = first_name[randrange(len(first_name))] + " " + last_name[randrange(len(last_name))]
+        self.profession = ""
         if property:
             self.commodities = property
         else: 
@@ -33,23 +34,11 @@ class Citizens():
 
 
 # admin functions
-def createCitizens(quantity = 1, profession = ""):
-    while True:
-        if input == "manual":
-            quantity = input('\nHow many citizens would you like to create? Or would you first like to set a profession (p):\n\n> ')
-            if quantity == "p":
-                profession = input("\nChoose the profession you would like the citizens to be:\n\n> ")
-                continue
-            elif (quantity() != True) or int(quantity) <= 0:
-                print("\nEner a valid input.")
-                continue
-        for _ in range(int(quantity)):
-            new_citizen = Citizens()
-            try:
-                new_citizen.assign_profession(profession)
-            except:
-                ...
-        break
+def createCitizens(quantity = 1, profession = "", property = {}):
+    for _ in range(int(quantity)):
+        new_citizen = Citizens(property)
+        if profession:
+            new_citizen.assign_profession(profession)
 
 
 def assign_commodities_to_pops(input, citizens_nums = [], quality = "", quantity = 1):

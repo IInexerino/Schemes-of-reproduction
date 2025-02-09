@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-q
 
 # Form implementation generated from reading ui file 'test.ui'
 #
@@ -9,15 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow
 import sys
-from icecream import ic
 
-from Data import *
-from Classes import *
-from MarketMechanics import *
-from ProductionMechanics import *
-from economic_simulation import *
+from Classes import createCitizens
+from display import display_all_current_info_ui
 
 
 class Ui_MainWindow(object):
@@ -129,13 +124,19 @@ class Ui_MainWindow(object):
         self.tab.setTabText(self.tab.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
 
     def create_citizen(self):
-        if self.tinput_quantity.text() == '':
-            createCitizens()
-        elif self.tinput_quantity.text() or self.tinput_profession.text():
-            createCitizens(self.tinput_quantity.text(), self.tinput_profession.text())
+        quantity = self.tinput_quantity.text()
+        profession = self.tinput_profession.text()
+
+        if self.tinput_quantity.text() == "":
+            quantity = 1
+        if self.tinput_profession.text() == "":
+            profession = ""
+
+        createCitizens(quantity, profession)
+
 
     def display(self, result):
-        result = display_current_info_in_ui()
+        result = display_all_current_info_ui()
         self.txt_monitor.setText(result)
         
 

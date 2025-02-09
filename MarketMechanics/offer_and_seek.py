@@ -1,8 +1,8 @@
-from Data import *
+from Data import CURRENT_MARKETPLACE
 from Classes import MarketCommodities
 
 
-def put_batch_of_commodities_for_sale(seller, quality, offer_price_perUnit, quantity):
+def offer_commodity_batch_for_sale(seller, quality, offer_price_perUnit, quantity):
     if quantity <= 0:
         print(f"Error: quantity ({quantity}) of quality ({quality}) sold by {seller.name}, must be a positive integer.")
         return # invalid quantity of commodities

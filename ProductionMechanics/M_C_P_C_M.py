@@ -1,5 +1,5 @@
-from Data import *
-from MarketMechanics import *
+from Data import PROD_RECIPES
+from MarketMechanics import purchase_commodities, offer_commodity_batch_for_sale
 
 def C_P_C(ownerofmop, recipe, itterations = 1): # C - P - C
     for _ in range(itterations):
@@ -14,6 +14,7 @@ def C_P_C(ownerofmop, recipe, itterations = 1): # C - P - C
             else:
                 print(f"\n{ownerofmop.name} does not have enough {a} to produce {recipe}.")
                 return "fail"
+            
         for a, b in inputs.items():
             ownerofmop.commodities[a] -= b
 
@@ -57,4 +58,4 @@ def M_C_P_C_M(owenerofmoney, recipe, offerprice_unit, itterations = 1):
     if M_C_P_C_status == "success":
         for a, b in outputs.items():
             b = b * itterations
-            put_batch_of_commodities_for_sale(owenerofmoney, a, offerprice_unit, b)
+            offer_commodity_batch_for_sale(owenerofmoney, a, offerprice_unit, b)
