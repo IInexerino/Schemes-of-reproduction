@@ -10,6 +10,8 @@ def display_current_citizens_ui():
             citizens_info += f"Profession: {a.profession}\n"
         for x, y in a.commodities.items():
             citizens_info += (f"\n- {x} {y}")
+        for x in a.machines:
+            citizens_info += (f"\n- {x} {x.name} | status: {x.current_functionality}")
         citizens_info += "\n"
     citizens_info += "\n___________________________________________________"
             

@@ -1,20 +1,16 @@
 from Data import CURRENT_MARKETPLACE
-from Classes import MarketCommodities
+from Classes import MarketCommodities, Machine
 
+
+# ===================== SELL FUNCTIONS ===================== #
 
 def offer_commodity_batch_for_sale(seller, quality, offer_price_perUnit, quantity):
+    """Puts a batch of commodities up for sale, assuming all are identical."""
     if quantity <= 0:
         print(f"Error: quantity ({quantity}) of quality ({quality}) sold by {seller.name}, must be a positive integer.")
-        return # invalid quantity of commodities
+        return  # Invalid quantity of commodities
     
-    for a, b in seller.commodities.items(): # Check if seller has enough to sell how much he desires to
-        if quality == a and quantity > b:
-            print(f'\nCitizen {seller.name} does not have enough of this commodity to put up for sale.')
-            return
-        elif quality == a and quantity <= b:
-            break
-
-    else: # if the loop completes without finding the item
+    if seller.commodities.get(quality, 0) < quantity:
         print(f'\nCitizen {seller.name} does not have enough of this commodity to put up for sale.')
         return
     
@@ -24,10 +20,20 @@ def offer_commodity_batch_for_sale(seller, quality, offer_price_perUnit, quantit
     # that the buyer takes a given offer price, but this assumption is not made here
 
 
+def offer_1machine_for_sale(seller, machine, offer_price, quantity):
+    """Put a machine up for sale. Each machine is unique."""
+    if machine.remaining_value <= 0:
+        print(f"Error: {seller.name} is trying to sell a broken {machine.name}.")
+        return  
+
+    MarketCommodities(seller, machine, offer_price, 1)
+
+
 def purchase_commodities(buyer, quality, quantity, dry_run = False): # M-C / C-M
     shopping_cart = []
     prices_per_unit = []
     quantities = []
+
     sorted_selected_marketplace = sorted(
         [a for a in CURRENT_MARKETPLACE if a.quality == quality and a.quantity > 0],
         key=lambda x: x.offer_price_perUnit
@@ -38,7 +44,6 @@ def purchase_commodities(buyer, quality, quantity, dry_run = False): # M-C / C-M
         print(f'\nCitizen {buyer.name} is attempting to buy commodity {quality} that does not exist on the market.')
         return "fail"
     for a in sorted_selected_marketplace:
-
         if a.quantity > 0: # check if there is more than one of this kind of good
 
             if sum(quantities) + a.quantity > quantity: # check if with the addition of this next batch of commodities, we would get more than we need
@@ -78,3 +83,31 @@ def purchase_commodities(buyer, quality, quantity, dry_run = False): # M-C / C-M
                     CURRENT_MARKETPLACE.remove(a)
 
             return "success"
+
+
+def purchase_machine(buyer, machine_type, dry_run=False):
+
+    available_machines = sorted(
+        [a for a in CURRENT_MARKETPLACE if isinstance(a.quality, Machine) and a.quality.name == machine_type and a.quantity > 0],
+        key=lambda x: x.offer_price_perUnit / max(1, x.quality.current_functionality)  
+    )
+
+    if not available_machines:
+        print(f"\n{buyer.name} wants to buy a {machine_type}, but none are available.")
+        return "fail"
+
+    best_machine = available_machines[0]  
+
+    if best_machine.offer_price_perUnit > buyer.commodities["money"]:
+        print(f"\n{buyer.name} does not have enough money to buy {machine_type}.")
+        return "fail"
+
+    if dry_run:
+        return "success"
+
+    buyer.money_spending(best_machine.offer_price_perUnit)
+    best_machine.seller.money_income(best_machine.offer_price_perUnit)
+    buyer.owned_machines.append(best_machine.quality)  
+    CURRENT_MARKETPLACE.remove(best_machine)  
+
+    return "success"
